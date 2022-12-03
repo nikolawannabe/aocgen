@@ -8,5 +8,7 @@ import (
 func Init() {
 	aoc.Register(2022, map[int]aoc.Puzzle{
 		1: Day01{},
+		2: Day02{},
+		3: Day03{},
 	})
 }
