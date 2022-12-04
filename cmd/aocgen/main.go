@@ -87,6 +87,7 @@ var genCmd = &cobra.Command{
 		gen.InitializePackage(year)
 		gen.InitializeYearsPackages()
 		gen.NewBenchmarks(year)
+		gen.NewTests(year, day)
 	},
 }
 

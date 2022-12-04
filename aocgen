@@ -1,3 +1,0 @@
-#!/bin/sh
-go build -o bin/aocgen cmd/aocgen/main.go
-bin/aocgen $@

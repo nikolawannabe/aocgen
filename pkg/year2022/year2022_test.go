@@ -7,6 +7,21 @@ import (
 	"aocgen/pkg/aoc"
 )
 
+func testDay04(b *testing.B) {
+	Init()
+	input := 
+	`2-4,6-8
+	2-3,4-5
+	5-7,7-9
+	2-8,3-7
+	6-6,4-6
+	2-6,4-8`
+	p := aoc.NewPuzzle(2022,4)
+	b.Run("PartA", func(b *testing.B) {
+		b.ResetTimer()
+		p.PartA(input)
+	})
+}
 func Benchmark2022Day01(b *testing.B) {
 	Init()
 	input := aoc.TestInput(2022, 1)
@@ -45,6 +60,23 @@ func Benchmark2022Day03(b *testing.B) {
 	Init()
 	input := aoc.TestInput(2022, 3)
 	p := aoc.NewPuzzle(2022, 3)
+	b.Run("PartA", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartA(input)
+		}
+	})
+	b.Run("PartB", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartB(input)
+		}
+	})
+}
+func Benchmark2022Day04(b *testing.B) {
+	Init()
+	input := aoc.TestInput(2022, 4)
+	p := aoc.NewPuzzle(2022, 4)
 	b.Run("PartA", func(b *testing.B) {
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
