@@ -24,3 +24,71 @@ func Benchmark2021Day01(b *testing.B) {
 		}
 	})
 }
+func Benchmark2021Day02(b *testing.B) {
+	Init()
+	input := aoc.TestInput(2021, 2)
+	p := aoc.NewPuzzle(2021, 2)
+	b.Run("PartA", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartA(input)
+		}
+	})
+	b.Run("PartB", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartB(input)
+		}
+	})
+}
+func Benchmark2021Day03(b *testing.B) {
+	Init()
+	input := aoc.TestInput(2021, 3)
+	p := aoc.NewPuzzle(2021, 3)
+	b.Run("PartA", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartA(input)
+		}
+	})
+	b.Run("PartB", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartB(input)
+		}
+	})
+}
+func Benchmark2021Day04(b *testing.B) {
+	Init()
+	input := aoc.TestInput(2021, 4)
+	p := aoc.NewPuzzle(2021, 4)
+	b.Run("PartA", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartA(input)
+		}
+	})
+	b.Run("PartB", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartB(input)
+		}
+	})
+}
+func Benchmark2021Day05(b *testing.B) {
+	Init()
+	input := aoc.TestInput(2021, 5)
+	p := aoc.NewPuzzle(2021, 5)
+	b.Run("PartA", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartA(input)
+		}
+	})
+	b.Run("PartB", func(b *testing.B) {
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			p.PartB(input)
+		}
+	})
+}
