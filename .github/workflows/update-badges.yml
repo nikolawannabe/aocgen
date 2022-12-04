@@ -18,7 +18,15 @@ jobs:
         with:
           userid: 2270772                          # your user id, see setup on how to obtain
           session: ${{ secrets.AOC_SESSION }}    # secret containing session code, see setup on how to obtain
-          
+          year: 2022
+          starsRegex: '(?<=https:\/\/img\.shields\.io\/badge\/Stars%202022%20⭐-)[0-9]+(?=-yellow)'
+
+      - uses: joblo2213/aoc-badges-action@v3
+        with:
+          userid: 2270772                          # your user id, see setup on how to obtain
+          session: ${{ secrets.AOC_SESSION }}    # secret containing session code, see setup on how to obtain
+          year: 2021
+          starsRegex: '(?<=https:\/\/img\.shields\.io\/badge\/Stars%202021%20⭐-)[0-9]+(?=-yellow)'
 #         Optional inputs:
 #         
 #         year: 2021                                                                                     # The year for which stats should be retrieved
