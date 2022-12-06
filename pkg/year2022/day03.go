@@ -49,15 +49,7 @@ func (p Day03) PartA(lines []string) any {
 }
 
 func reduceToUnique(line string) string {
-	unique := make(map[rune]bool, 0)
-	for _, char := range line {
-		unique[char] = true
-	}
-	out := make([]rune, 0)
-	for char, _ := range unique {
-		out = append(out, char)
-	}
-	return string(out)
+	return concat(set(split(line)))
 }
 
 func (p Day03) PartB(lines []string) any {

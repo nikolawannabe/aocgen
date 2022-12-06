@@ -70,18 +70,11 @@ func printStacks(stacks [][]rune) {
 	}
 }
 
-func reverseSlice(slice []rune) []rune {
-	var rev []rune
-	for _, n := range slice {
-		rev = append([]rune{n}, rev...)
-	}
-	return rev
-}
 func runInstruction(stacks [][]rune, ins instruction, newCrane bool) [][]rune {
 	tsl := len(stacks[ins.FromStackNum-1])
 	stuffToMove := stacks[ins.FromStackNum-1][tsl-ins.MoveHowMany : tsl]
 	if !newCrane {
-		stuffToMove = reverseSlice(stuffToMove)
+		stuffToMove = reverse(stuffToMove)
 	}
 	stacks[ins.ToStackNum-1] = append(stacks[ins.ToStackNum-1], stuffToMove...)
 	stacks[ins.FromStackNum-1] = stacks[ins.FromStackNum-1][:tsl-ins.MoveHowMany]
