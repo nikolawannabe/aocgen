@@ -43,8 +43,6 @@ func (p Day03) PartA(lines []string) any {
 			}
 		}
 	}
-	log.Printf("total lines: %d", len(lines))
-	log.Printf("found priorities: %d", foundPriorities)
 	return totalPriorities
 }
 
@@ -81,6 +79,5 @@ func (p Day03) PartB(lines []string) any {
 		}
 
 	}
-	log.Printf("priorities found: %d", foundPriorities)
 	return totalPriority
 }

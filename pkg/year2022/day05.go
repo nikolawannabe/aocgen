@@ -90,38 +90,26 @@ func getStackTops(stacks [][]rune) string {
 }
 func (p Day05) PartA(lines []string) any {
 	stackHeight := findCrateStackHeight(lines) - 1
-	log.Printf("stack height: %d", stackHeight)
 
 	stacks := getCrateStacks(lines[0:stackHeight])
-	printStacks(stacks)
 
 	instructions := getStackInstructions(lines[stackHeight+2:])
-	log.Printf("instructions: %v", instructions)
 
 	for _, instruction := range instructions {
 		stacks = runInstruction(stacks, instruction, false)
-		log.Printf("instruction: %d", instruction)
-		printStacks(stacks)
-
 	}
 	return getStackTops(stacks)
 }
 
 func (p Day05) PartB(lines []string) any {
 	stackHeight := findCrateStackHeight(lines) - 1
-	log.Printf("stack height: %d", stackHeight)
 
 	stacks := getCrateStacks(lines[0:stackHeight])
-	printStacks(stacks)
 
 	instructions := getStackInstructions(lines[stackHeight+2:])
-	log.Printf("instructions: %v", instructions)
 
 	for _, instruction := range instructions {
 		stacks = runInstruction(stacks, instruction, true)
-		log.Printf("instruction: %d", instruction)
-		printStacks(stacks)
-
 	}
 	return getStackTops(stacks)
 }
