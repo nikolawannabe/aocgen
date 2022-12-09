@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-type Day08 struct{}
+type Day08Orig struct{}
 
 type visible bool
 
@@ -117,7 +117,7 @@ func getVisibilityScore(t tree, forestMap map[tree]int, xbound int, ybound int) 
 		lookRight(t, forestMap, xbound, ybound)
 }
 
-func (p Day08) PartA(lines []string) any {
+func (p Day08Orig) PartA(lines []string) any {
 	forestWidth := len(lines[0])
 	forestHeight := len(lines)
 	heightsMap := make(map[tree]int, 0)
@@ -154,7 +154,7 @@ func (p Day08) PartA(lines []string) any {
 	return visibleTrees
 }
 
-func (p Day08) PartB(lines []string) any {
+func (p Day08Orig) PartB(lines []string) any {
 	forestWidth := len(lines[0])
 	forestHeight := len(lines)
 	heightsMap := make(map[tree]int, 0)

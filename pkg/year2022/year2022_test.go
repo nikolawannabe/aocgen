@@ -126,10 +126,10 @@ func Benchmark2022Day07(b *testing.B) {
 		}
 	})
 }
-func Benchmark2022Day08(b *testing.B) {
+func Benchmark2022Day09(b *testing.B) {
 	Init()
-	input := aoc.TestInput(2022, 8)
-	p := aoc.NewPuzzle(2022, 8)
+	input := aoc.TestInput(2022, 9)
+	p := aoc.NewPuzzle(2022, 9)
 	b.Run("PartA", func(b *testing.B) {
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {

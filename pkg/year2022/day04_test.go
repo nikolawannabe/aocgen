@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const example = `2-4,6-8
+const example04 = `2-4,6-8
 2-3,4-5
 5-7,7-9
 2-8,3-7
@@ -18,7 +18,7 @@ const example = `2-4,6-8
 
 func TestDay04PArtA(t *testing.T) {
 	Init()
-	input := strings.Split(example, "\n")
+	input := strings.Split(example04, "\n")
 	p := aoc.NewPuzzle(2022, 4)
 
 	output := p.PartA(input)
@@ -27,7 +27,7 @@ func TestDay04PArtA(t *testing.T) {
 
 func TestDay04PArtB(t *testing.T) {
 	Init()
-	input := strings.Split(example, "\n")
+	input := strings.Split(example04, "\n")
 	p := aoc.NewPuzzle(2022, 4)
 
 	output := p.PartB(input)
