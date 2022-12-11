@@ -142,12 +142,33 @@ func getMonkeys(lines []string) map[int]Monkey {
 	return monkeys
 }
 
-func getLCM(monkeys map[int]Monkey) int {
-	m := 1
+func getMonkeyLCM(monkeys map[int]Monkey) int {
+	m := make([]int, 0)
 	for _, monkey := range monkeys {
-		m = m * monkey.ModAmount
+		m = append(m, monkey.ModAmount)
 	}
-	return m
+
+	return LCM(m[0], m[1], m[2:])
+}
+
+func LCM(a, b int, integers []int) int {
+	result := a * b / GCD(a, b)
+
+	for i := 0; i < len(integers); i++ {
+		result = LCM(result, integers[i], integers[2:])
+	}
+
+	return result
+}
+
+// greatest common divisor (GCD) via Euclidean algorithm
+func GCD(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
 }
 
 func (p Day11) PartA(lines []string) any {
@@ -173,7 +194,7 @@ func (p Day11) PartB(lines []string) any {
 	rounds := 10000
 
 	monkeys := getMonkeys(lines)
-	lcm := getLCM(monkeys)
+	lcm := getMonkeyLCM(monkeys)
 	log.Printf("lcm: %d", lcm)
 
 	for i := 0; i < rounds; i++ {
