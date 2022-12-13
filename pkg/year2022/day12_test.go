@@ -29,6 +29,6 @@ func TestDay12PartB(t *testing.T) {
 	input := strings.Split(example12, "\n")
 	p := aoc.NewPuzzle(2022, 12)
 
-	p.PartB(input)
-	// assert here
+	o := p.PartB(input)
+	assert.Equal(t, 29, o)
 }

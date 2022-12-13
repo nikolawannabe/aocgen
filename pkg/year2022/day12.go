@@ -2,6 +2,7 @@ package year2022
 
 import (
 	"log"
+	"math"
 	"strconv"
 )
 
@@ -16,14 +17,11 @@ type forestMap struct {
 	current       position
 	start         position
 	end           position
-	tree          *Node
-	levelCount    int
 }
 
 type Node struct {
-	selfHeight int
-	self       position
-	neighbors  []Node
+	self     position
+	distance int
 }
 
 func printMap(forest forestMap) {
@@ -39,60 +37,56 @@ func printMap(forest forestMap) {
 	log.Printf("\n")
 }
 
-func (n *Node) addNeighbors(forest forestMap) {
-	ns := make([]Node, 0)
-	x := n.self.x
-	y := n.self.y
-	options := []position{{x: x + 1, y: y}, {x: x, y: y + 1}, {x: x - 1, y: y}, {x, y - 1}}
-	for _, option := range options {
-		_, ok := forest.heightGridInt[option]
-		if ok &&
-			(forest.heightGridInt[option]-n.selfHeight < 2 ||
-				n.selfHeight > forest.heightGridInt[option]) {
-			if !forest.visited[option] {
-				neighbor := Node{selfHeight: forest.heightGridInt[option], self: option}
-				forest.visited[option] = true
-				neighbor.addNeighbors(forest)
-				ns = append(ns, neighbor)
-				continue
+func (f *forestMap) searchTree() (int, bool) {
+	n := Node{self: f.start, distance: 0}
+	return f.BFS(n)
+}
+
+func (f *forestMap) searchTreeFrom(pos position) (int, bool) {
+	n := Node{self: pos, distance: 0}
+	return f.BFS(n)
+}
+
+func (f *forestMap) BFS(node Node) (int, bool) {
+	queue := []Node{}
+	queue = append(queue, node)
+	return f.processQueue(queue)
+}
+
+func (f *forestMap) processQueue(queue []Node) (int, bool) {
+	if len(queue) == 0 {
+		return 0, false
+	}
+
+	for len(queue) > 0 {
+		if queue[0].self.x == f.end.x && queue[0].self.y == f.end.y {
+			log.Printf("found goal: %d, %t", queue[0].distance, true)
+			return queue[0].distance, true
+		}
+		x := queue[0].self.x
+		y := queue[0].self.y
+		options := []position{{x: x + 1, y: y}, {x: x, y: y + 1}, {x: x - 1, y: y}, {x, y - 1}}
+		for _, option := range options {
+			_, ok := f.heightGridInt[option]
+			if ok &&
+				(f.heightGridInt[option]-f.heightGridInt[queue[0].self] < 2 ||
+					f.heightGridInt[queue[0].self] > f.heightGridInt[option]) {
+				if _, pres := f.visited[option]; !pres {
+					if _, pres := f.visited[option]; !pres {
+						f.visited[option] = true
+						n := Node{self: option, distance: queue[0].distance + 1}
+						//log.Printf("added %#v", n)
+						queue = append(queue, n)
+					}
+				} else {
+					//log.Printf("already visited %#v", option)
+				}
 			}
-
 		}
+		queue = queue[1:]
 	}
-	n.neighbors = ns
-}
+	return 0, false
 
-func (f *forestMap) buildTree() {
-	start := f.start
-	nodeStart := Node{selfHeight: f.heightGridInt[start], self: start}
-	nodeStart.addNeighbors(*f)
-	f.tree = &nodeStart
-}
-
-func (f *forestMap) visitNode(n Node) bool {
-	f.levelCount++
-	//log.Printf("entered depth: %d", f.levelCount)
-	for _, child := range n.neighbors {
-		if child.self.x == f.end.x && child.self.y == f.end.y {
-			log.Printf("%v", child.self)
-			return true
-		}
-	}
-
-	for _, child := range n.neighbors {
-		found := f.visitNode(child)
-		if found {
-			return true
-		}
-
-	}
-	f.levelCount--
-	//log.Printf("left, at depth: %d", f.levelCount)
-	return false
-}
-
-func (f *forestMap) searchTree() bool {
-	return f.visitNode(*f.tree)
 }
 
 func printGrid(forest forestMap) {
@@ -122,14 +116,13 @@ func (f *forestMap) convertToInt() {
 		for x := 0; x < f.width; x++ {
 			p := position{x: x, y: y}
 			height := int(f.heightGrid[p]) - 'a'
-			log.Printf("p: %d, height: %d", p, height)
 			heightMap[p] = height
 		}
 	}
 	f.heightGridInt = heightMap
 }
 
-func (p Day12) PartA(lines []string) any {
+func setup(lines []string) forestMap {
 	forest := forestMap{}
 	rMap := make(map[position]rune, 0)
 	visited := make(map[position]bool, 0)
@@ -144,6 +137,7 @@ func (p Day12) PartA(lines []string) any {
 				forest.start = p
 				forest.current = p
 				rMap[p] = 'a'
+				visited[p] = true
 				continue
 			}
 			if char == 'E' {
@@ -159,17 +153,52 @@ func (p Day12) PartA(lines []string) any {
 	forest.width = len(lines[0])
 	forest.height = len(lines)
 	forest.visited = visited
-	printMap(forest)
 	forest.convertToInt()
+	return forest
+}
+func (p Day12) PartA(lines []string) any {
+	forest := setup(lines)
 	printGrid(forest)
-	forest.buildTree()
-	isFound := forest.searchTree()
+
+	steps, isFound := forest.searchTree()
 	if !isFound {
-		log.Printf("did not find node")
+		log.Printf("not found")
+		return 0
 	}
-	return forest.levelCount
+
+	return steps
 }
 
 func (p Day12) PartB(lines []string) any {
-	return "implement_me"
+	forest := setup(lines)
+	printGrid(forest)
+
+	starts := make([]position, 0)
+	for pos, height := range forest.heightGridInt {
+		if height == 0 {
+			starts = append(starts, pos)
+		}
+	}
+	log.Printf("found %d starts", len(starts))
+
+	pathLengths := make(map[position]int, 0)
+	for _, start := range starts {
+		forest.visited = make(map[position]bool, 0)
+		log.Printf("testing start: %#v", start)
+		steps, isFound := forest.searchTreeFrom(start)
+		if isFound {
+			log.Printf("found")
+			pathLengths[start] = steps
+		} else {
+			log.Printf("not found")
+		}
+	}
+
+	minSteps := math.MaxInt
+	for _, steps := range pathLengths {
+		if steps < minSteps {
+			minSteps = steps
+		}
+	}
+	return minSteps
 }
