@@ -140,7 +140,8 @@ function part2() {
         return 0;
     })
 
-    p1val = 0;
+    let p1val = 0;
+    let p2val = 0;
     for (i = 0; i < packets.length; i++) {
         if (packets[i] === p1) {
             p1val = i+1;
