@@ -1,5 +1,10 @@
 package year2022
 
+import (
+	"log"
+	"strconv"
+)
+
 func reverse[T any](s []T) []T {
 	var rev []T
 	for _, n := range s {
@@ -53,4 +58,16 @@ func splitByEmpty(lines []string) [][]string {
 		lineGroups = append(lineGroups, lineGroup)
 	}
 	return lineGroups
+}
+
+func atoi(input string) int {
+	o, err := strconv.Atoi(input)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	return o
+}
+
+func itoa(input int) string {
+	return strconv.Itoa(input)
 }
