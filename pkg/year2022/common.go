@@ -2,6 +2,7 @@ package year2022
 
 import (
 	"log"
+	"sort"
 	"strconv"
 )
 
@@ -70,4 +71,44 @@ func atoi(input string) int {
 
 func itoa(input int) string {
 	return strconv.Itoa(input)
+}
+
+type intervalsArray [][]int
+
+func (intA intervalsArray) Len() int {
+	return len(intA)
+}
+
+func (intA intervalsArray) Swap(i, j int) {
+	intA[i], intA[j] = intA[j], intA[i]
+}
+
+func (intA intervalsArray) Less(i, j int) bool {
+	return intA[i][0] < intA[j][0]
+}
+
+func merge(intervals [][]int) [][]int {
+
+	intA := intervalsArray(intervals)
+
+	sort.Sort(intA)
+
+	intervalsSorted := [][]int(intA)
+
+	var output [][]int
+	currentIntervalStart := intervalsSorted[0][0]
+	currentIntervalEnd := intervalsSorted[0][1]
+	for j := 1; j < len(intervalsSorted); j++ {
+		if currentIntervalEnd >= intervalsSorted[j][0] {
+			if intervalsSorted[j][1] > currentIntervalEnd {
+				currentIntervalEnd = intervalsSorted[j][1]
+			}
+		} else {
+			output = append(output, []int{currentIntervalStart, currentIntervalEnd})
+			currentIntervalStart = intervalsSorted[j][0]
+			currentIntervalEnd = intervalsSorted[j][1]
+		}
+	}
+	output = append(output, []int{currentIntervalStart, currentIntervalEnd})
+	return output
 }
