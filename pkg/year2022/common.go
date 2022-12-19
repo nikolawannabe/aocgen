@@ -88,8 +88,12 @@ func (intA intervalsArray) Less(i, j int) bool {
 }
 
 func merge(intervals [][]int) [][]int {
-
-	intA := intervalsArray(intervals)
+	orderedPairs := make([][]int, 0)
+	for _, pair := range intervals {
+		sort.Ints(pair)
+		orderedPairs = append(orderedPairs, pair)
+	}
+	intA := intervalsArray(orderedPairs)
 
 	sort.Sort(intA)
 
@@ -111,4 +115,12 @@ func merge(intervals [][]int) [][]int {
 	}
 	output = append(output, []int{currentIntervalStart, currentIntervalEnd})
 	return output
+}
+
+func map_len[T comparable, X comparable](input map[T]X) int {
+	items := 0
+	for _ = range input {
+		items++
+	}
+	return items
 }

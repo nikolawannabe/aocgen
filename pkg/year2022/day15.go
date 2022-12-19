@@ -31,8 +31,13 @@ type tunnels struct {
 func (t *tunnels) printTunnel() {
 	output := ""
 
-	for y := t.upperLeft.y; y < t.lowerRight.y; y++ {
+	for y := t.upperLeft.y - 1; y < t.lowerRight.y; y++ {
 		for x := t.upperLeft.x - 1; x < t.lowerRight.x; x++ {
+			if y == t.upperLeft.y-1 {
+				xStr := itoa(x)
+				output += xStr[len(xStr)-1:]
+				continue
+			}
 			if x == t.upperLeft.x-1 {
 				yStr := itoa(y)
 				output += yStr[len(yStr)-1:]
@@ -149,13 +154,40 @@ func (t *tunnels) sumIntervals(intervals [][]int) int {
 	return sum
 }
 
-func (p Day15) PartA(lines []string) any {
+func (t *tunnels) checkPair(x int, y int, start int, end int) int {
+	if start <= x && y == t.y && x <= end {
+		return 1
+	}
+	return 0
+}
+func (t *tunnels) findAffectedStuff(intervals [][]int) int {
+	onLine := 0
+	for _, s := range t.sensors {
+		for _, intervalPair := range intervals {
+			found := t.checkPair(s.at.x, s.at.y, intervalPair[0], intervalPair[1])
+			if found == 1 {
+				onLine += found
+				break
+			}
+		}
+		for _, intervalPair := range intervals {
+			found := t.checkPair(s.beacon.x, s.beacon.y, intervalPair[0], intervalPair[1])
+			if found == 1 {
+				onLine += found
+				break
+			}
+		}
+	}
+	return onLine
+}
+
+func getEliminated(yLine int, lines []string) int {
 	t := tunnels{}
 	sensors := make(map[position]sensor, 0)
 	beacons := make(map[position]bool, 0)
 	t.sensors = sensors
 	t.beacons = beacons
-	t.y = 2000000
+	t.y = yLine
 	eliminated := make(map[position]bool, 0)
 	t.eliminated = eliminated
 	t.xpairs = make([][]int, 0)
@@ -181,7 +213,7 @@ func (p Day15) PartA(lines []string) any {
 
 		xpair := t.getXPair(s, xd)
 		t.xpairs = append(t.xpairs, xpair)
-		//t.eliminateArea(s)
+		t.eliminateArea(s)
 		if s.at.y-mhd <= t.y && t.y <= s.at.y+mhd {
 			t.maybeExpandBounds(position{x: s.at.x + mhd, y: s.at.y})
 			t.maybeExpandBounds(position{x: s.at.x - mhd, y: s.at.y})
@@ -195,10 +227,18 @@ func (p Day15) PartA(lines []string) any {
 	mergedPairs := merge(t.xpairs)
 	log.Printf("%#v", mergedPairs)
 
-	//t.printTunnel()
-	//return t.countEliminated()
+	t.printTunnel()
 
-	return t.sumIntervals(mergedPairs)
+	stuffOnLine := t.findAffectedStuff(mergedPairs)
+	//return t.countEliminated()
+	log.Printf("stuff on y: %d", stuffOnLine)
+
+	return t.sumIntervals(mergedPairs) - stuffOnLine + 1
+}
+
+func (p Day15) PartA(lines []string) any {
+	y := 2000000
+	return getEliminated(y, lines)
 }
 
 func (p Day15) PartB(lines []string) any {

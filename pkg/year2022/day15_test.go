@@ -1,6 +1,7 @@
 package year2022
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -25,14 +26,28 @@ Sensor at x=14, y=3: closest beacon is at x=15, y=3
 Sensor at x=20, y=1: closest beacon is at x=15, y=3`
 
 func TestDay15PartA(t *testing.T) {
+	type test struct {
+		y int
+		o int
+	}
 	Init()
 	input := strings.Split(example15, "\n")
-	p := aoc.NewPuzzle(2022, 15)
+	//p := aoc.NewPuzzle(2022, 15)
 
-	o := p.PartA(input)
-	assert.Equal(t, 25, o)
+	tests := []test{
+		{y: 11, o: 28},
+		{y: 10, o: 26},
+		{y: 9, o: 25},
+		{y: 8, o: 23},
+	}
+
+	for _, test := range tests {
+		o := getEliminated(test.y, input)
+		assert.Equal(t, test.o, o, fmt.Sprintf("y %d", test.y))
+	}
 }
 
+// 4960345 wrong
 // 4960344 wrong
 // 4210673 too low
 // 5186801 too high
