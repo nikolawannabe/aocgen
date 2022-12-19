@@ -1,3 +1,13 @@
+/*
+In the first blueprint example:
+o := 4t
+c := 8t (2o) // costs 2 ore
+obs := 12t + 14*8t // (3 ore and 14 clay.)
+g := 4t + 7*14*8t // costs 2 ore and 7 obsidian.
+
+convert each ore resources to a base unit.  In this case "t".
+switch to the next up resource type in the chain when the total t is equal or less than the production per t
+*/
 package year2022
 
 import (
@@ -25,8 +35,9 @@ type Blueprint struct {
 }
 
 type Unit struct {
-	Name       string
-	Production map[oreType]int
+	Name           string
+	Production     map[oreType]int
+	BaseProduction int
 }
 
 type MineralCollectorSystem struct {
@@ -84,6 +95,15 @@ func (m *MineralCollectorSystem) finishProduceCollectingRobot() {
 	log.Printf("The new %s-collecting robot is ready; you now have %d of them.", collector, m.Units[collector])
 }
 
+/*
+func (m *MineralCollectorSystem) getCurrentUnitMinuteProduction(o oreType) {
+	total := 0
+
+	for resourceType, resourceCost := range m.Blueprint.Blueprints[o].Cost {
+		total +
+	}
+} */
+
 func (m *MineralCollectorSystem) beginProduceRobot() {
 	done := m.tryBeginProduceCollectingRobot(oreCollectorType("geode"))
 	if done {
@@ -93,9 +113,12 @@ func (m *MineralCollectorSystem) beginProduceRobot() {
 	if done {
 		return
 	}
-	done = m.tryBeginProduceCollectingRobot(oreCollectorType("clay"))
-	if done {
-		return
+	if m.Blueprint.Blueprints[oreCollectorType("obsidian")].Cost[oreType("clay")]*m.Units[oreCollectorType("clay")] <
+		m.Blueprint.Blueprints[oreCollectorType("obsidian")].Cost[oreType("clay")]*m.Units[oreCollectorType("obsidian")] {
+		done = m.tryBeginProduceCollectingRobot(oreCollectorType("clay"))
+		if done {
+			return
+		}
 	}
 	done = m.tryBeginProduceCollectingRobot(oreCollectorType("ore"))
 	if done {
@@ -121,6 +144,7 @@ func (p Day19) PartA(lines []string) any {
 		bp := Blueprint{Id: i + 1}
 		parts := strings.Split(line, ":")
 		bp.Blueprints = make(map[oreCollectorType]UnitBlueprint, 0)
+		//baseProduction := 1
 		for _, unitStatement := range strings.Split(parts[1], ".") {
 			if len(unitStatement) == 0 {
 				continue
