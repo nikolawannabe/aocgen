@@ -41,6 +41,8 @@ func TestWrappingSet(t *testing.T) {
 	assert.Equal(t, 3, o)
 }
 
+// -13757 wrong
+
 func TestDay20PartA(t *testing.T) {
 	Init()
 	input := strings.Split(example20, "\n")

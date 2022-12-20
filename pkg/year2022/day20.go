@@ -20,9 +20,9 @@ func (w *wrappingSlice) set(position int, value int) {
 		tail = []int(*w)[newPos+1:]
 	}
 	head := []int(*w)[1 : newPos+1]
-	log.Printf("head %#v", head)
-	log.Printf("value %d", value)
-	log.Printf("tail %#v", tail)
+	//log.Printf("head %#v", head)
+	//log.Printf("value %d", value)
+	//log.Printf("tail %#v", tail)
 	*w = append(head, append([]int{value}, tail...)...)
 }
 
@@ -40,11 +40,12 @@ func (w *wrappingSlice) get(position int) int {
 }
 
 func mix(index int, in []int, out wrappingSlice) wrappingSlice {
-	log.Printf("out: %#v", out)
+	//log.Printf("out: %#v", out)
 	value := in[index]
 	if value == 0 {
 		return out
 	}
+	// this should be the _current_ out index, not the index from the in string
 	newPosition := index + value
 	out.set(newPosition, value)
 	return out
@@ -64,13 +65,16 @@ func (p Day20) PartA(lines []string) any {
 	out := wrappingSlice(make([]int, count))
 	in := make([]int, 0)
 	for i, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
 		in = append(in, atoi(line))
 		out[i] = atoi(line)
 	}
 
 	log.Printf("%#v", out)
 	for i, _ := range in {
-		log.Printf("== i %d ==", i)
+		//log.Printf("== i %d ==", i)
 		out = mix(i, in, out)
 		log.Printf("%#v", out)
 	}
