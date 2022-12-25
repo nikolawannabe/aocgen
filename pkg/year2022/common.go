@@ -42,6 +42,14 @@ func concat(rs []rune) string {
 	return s
 }
 
+func concatStr(rs []string) string {
+	s := ""
+	for _, str := range rs {
+		s += string(str)
+	}
+	return s
+}
+
 func splitByEmpty(lines []string) [][]string {
 	lineGroups := make([][]string, 0)
 	lineGroup := make([]string, 0)
