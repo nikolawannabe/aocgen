@@ -2,6 +2,7 @@ package year2022
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"testing"
 
@@ -26,24 +27,14 @@ Sensor at x=14, y=3: closest beacon is at x=15, y=3
 Sensor at x=20, y=1: closest beacon is at x=15, y=3`
 
 func TestDay15PartA(t *testing.T) {
-	type test struct {
-		y int
-		o int
-	}
 	Init()
 	input := strings.Split(example15, "\n")
 	//p := aoc.NewPuzzle(2022, 15)
 
-	tests := []test{
-		{y: 11, o: 28},
-		{y: 10, o: 26},
-		{y: 9, o: 25},
-		{y: 8, o: 23},
-	}
-
-	for _, test := range tests {
-		o := getEliminated(test.y, input)
-		assert.Equal(t, test.o, o, fmt.Sprintf("y %d", test.y))
+	for y := 0; y < 21; y++ {
+		log.Printf("========= y=%d ========", y)
+		byEliminated, byIntervals := getTotal(y, input)
+		assert.Equal(t, byEliminated, byIntervals, fmt.Sprintf("y %d should be %d but was %d", y, byEliminated, byIntervals))
 	}
 }
 
@@ -53,12 +44,23 @@ func TestDay15PartA(t *testing.T) {
 // 5186801 too high
 // 6543782
 // 7130999
-// 7130999
+// 4960344 wrong
+// 4919281
+
 func TestDay15PartB(t *testing.T) {
 	Init()
 	input := strings.Split(example15, "\n")
 	p := aoc.NewPuzzle(2022, 15)
 
 	p.PartB(input)
-	// assert here
+
+	pairs, y := findIntervalCountAndY(20, input)
+	log.Printf("found pairs %#v", pairs)
+	exes := findXIntersection(pairs)
+	if len(exes) > 1 {
+		log.Printf("too many exes: %#v", exes)
+		assert.Fail(t, "too many exes")
+	}
+	frequency := findFrequency(exes[0], y)
+	assert.Equal(t, 56000011, frequency)
 }
